@@ -1,6 +1,6 @@
-package com.babakmhz.githubuserfindercompose.data.network.response
+package com.babakmhz.githubuserfindercompose.data.model
 
-data class Item(
+data class User(
     val avatar_url: String,
     val events_url: String,
     val followers_url: String,
@@ -20,6 +20,4 @@ data class Item(
     val subscriptions_url: String,
     val type: String,
     val url: String
-){
-    private var totalResults = 0
-}
+)
