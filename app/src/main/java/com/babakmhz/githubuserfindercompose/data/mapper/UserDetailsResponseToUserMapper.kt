@@ -6,43 +6,43 @@ import com.babakmhz.githubuserfindercompose.data.network.response.userDetails.Us
 
 class UserDetailsResponseToUserMapper : Mapper<UserDetailsNetworkResponse, User> {
 
-    override fun mapToDomainModel(response: UserDetailsNetworkResponse): User {
+    override fun mapToDomainModel(model: UserDetailsNetworkResponse): User {
 
         return User(
-            avatar_url = response.avatar_url,
-            events_url = response.events_url,
-            followers_url = response.followers_url,
-            following_url = response.following_url,
-            gists_url = response.gists_url,
-            gravatar_id = response.gravatar_id,
-            html_url = response.html_url,
-            id = response.id,
-            login = response.login,
-            node_id = response.node_id,
-            organizations_url = response.organizations_url,
-            received_events_url = response.received_events_url,
-            repos_url = response.repos_url,
-            site_admin = response.site_admin,
-            starred_url = response.starred_url,
-            subscriptions_url = response.subscriptions_url,
-            type = response.type,
-            url = response.url,
+            avatar_url = model.avatar_url,
+            events_url = model.events_url,
+            followers_url = model.followers_url,
+            following_url = model.following_url,
+            gists_url = model.gists_url,
+            gravatar_id = model.gravatar_id,
+            html_url = model.html_url,
+            id = model.id,
+            login = model.login,
+            node_id = model.node_id,
+            organizations_url = model.organizations_url,
+            received_events_url = model.received_events_url,
+            repos_url = model.repos_url,
+            site_admin = model.site_admin,
+            starred_url = model.starred_url,
+            subscriptions_url = model.subscriptions_url,
+            type = model.type,
+            url = model.url,
         ).apply {
             userDetails = UserDetails(
-                bio = response.bio,
-                blog = response.blog,
-                company = response.company,
-                created_at = response.created_at,
-                email = response.email,
-                followers = response.followers,
-                following = response.following,
-                hireable = response.hireable,
-                location = response.location,
-                name = response.name,
-                public_gists = response.public_gists,
-                public_repos = response.public_repos,
-                twitter_username = response.twitter_username,
-                updated_at = response.updated_at
+                bio = model.bio,
+                blog = model.blog,
+                company = model.company,
+                created_at = model.created_at,
+                email = model.email,
+                followers = model.followers,
+                following = model.following,
+                hireable = model.hireable,
+                location = model.location,
+                name = model.name,
+                public_gists = model.public_gists,
+                public_repos = model.public_repos,
+                twitter_username = model.twitter_username,
+                updated_at = model.updated_at
             )
         }
     }
