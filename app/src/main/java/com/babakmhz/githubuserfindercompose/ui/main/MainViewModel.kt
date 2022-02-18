@@ -1,5 +1,6 @@
 package com.babakmhz.githubuserfindercompose.ui.main
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +13,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-const val SEARCH_DELAY = 2000L
+const val SEARCH_DELAY = 3000L
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -34,6 +35,7 @@ class MainViewModel @Inject constructor(
     private var _userDetailsLiveData = MutableLiveData<User>()
     val userDetailsLiveData: LiveData<User> = _userDetailsLiveData
 
+    val searchQuery = mutableStateOf("")
     private var page = 0
 
     fun searchUsers(queryFlow: StateFlow<String>) =
