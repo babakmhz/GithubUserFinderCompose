@@ -1,9 +1,9 @@
 package com.babakmhz.githubuserfindercompose.di
 
-import ApiService
 import com.babakmhz.githubuserfindercompose.BuildConfig
 import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.RepositoryImpl
+import com.babakmhz.githubuserfindercompose.data.network.ApiService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
