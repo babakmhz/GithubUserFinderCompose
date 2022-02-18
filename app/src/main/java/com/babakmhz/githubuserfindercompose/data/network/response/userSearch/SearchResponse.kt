@@ -1,4 +1,4 @@
-package com.babakmhz.githubuserfindercompose.data.network.response
+package com.babakmhz.githubuserfindercompose.data.network.response.userSearch
 
 data class SearchResponse(
     val incomplete_results: Boolean,

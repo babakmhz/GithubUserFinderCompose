@@ -1,6 +1,6 @@
 package com.babakmhz.githubuserfindercompose.data.network
 
-import com.babakmhz.githubuserfindercompose.data.network.response.SearchResponse
+import com.babakmhz.githubuserfindercompose.data.network.response.userSearch.SearchResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

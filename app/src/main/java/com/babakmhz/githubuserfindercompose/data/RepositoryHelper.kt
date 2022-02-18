@@ -7,4 +7,8 @@ interface RepositoryHelper {
     suspend fun searchUsers(
         query: String, page: Int,
     ): Flow<List<User>>
+
+    suspend fun getUserDetails(
+        query: String, page: Int,
+    ): Flow<List<User>>
 }

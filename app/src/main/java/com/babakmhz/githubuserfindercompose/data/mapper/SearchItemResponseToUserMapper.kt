@@ -1,8 +1,8 @@
 package com.babakmhz.githubuserfindercompose.data.mapper
 
 import com.babakmhz.githubuserfindercompose.data.model.User
-import com.babakmhz.githubuserfindercompose.data.network.response.Item
-import com.babakmhz.githubuserfindercompose.data.network.response.SearchResponse
+import com.babakmhz.githubuserfindercompose.data.network.response.userSearch.Item
+import com.babakmhz.githubuserfindercompose.data.network.response.userSearch.SearchResponse
 
 class SearchItemResponseToUserMapper : Mapper<Item, User> {
 
@@ -55,7 +55,7 @@ class SearchItemResponseToUserMapper : Mapper<Item, User> {
         )
     }
 
-    fun mapListItemsToListUsers(networkResponse:SearchResponse):List<User> {
+    fun mapListItemsToListUsers(networkResponse: SearchResponse):List<User> {
         return networkResponse.items.map {
             mapToDomainModel(it).apply {
                 totalSearchResultsCount = networkResponse.total_count
