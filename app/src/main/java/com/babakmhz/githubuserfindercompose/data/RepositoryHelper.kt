@@ -1,6 +1,7 @@
 package com.babakmhz.githubuserfindercompose.data
 
 import com.babakmhz.githubuserfindercompose.data.model.User
+import com.babakmhz.githubuserfindercompose.data.model.UserDetails
 import kotlinx.coroutines.flow.Flow
 
 interface RepositoryHelper {
@@ -10,5 +11,5 @@ interface RepositoryHelper {
 
     suspend fun getUserDetails(
         query: String, page: Int,
-    ): Flow<List<User>>
+    ):User
 }
