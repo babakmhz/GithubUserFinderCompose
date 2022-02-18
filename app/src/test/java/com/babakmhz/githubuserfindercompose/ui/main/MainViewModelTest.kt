@@ -124,12 +124,12 @@ class MainViewModelTest {
             viewModel.loadingLiveData.observeForever { }
 
             viewModel.searchUsers(generateFakeFlow())
-            // waiting for network Response and in queryFlow that we previously had
 
             assertNotNull(viewModel.loadingLiveData.value)
             advanceTimeBy(SEARCH_DELAY)
             assertEquals(viewModel.loadingLiveData.value, true)
 
+            // waiting for network Response and in queryFlow that we previously had
             advanceTimeBy(delayForNetworkResponse)
             assertNotNull(viewModel.errorLiveData.value)
 
@@ -139,4 +139,52 @@ class MainViewModelTest {
         }
 
 
+    @Test
+    fun `test getting user details with valid api response should change loading state to true and false and detailsLiveData to Valid data`() =
+        coroutineDispatcher.runBlockingTest {
+            val response = FakeObjects.user
+            coEvery { repositoryHelper.getUserDetails(ofType()) } coAnswers {
+                delay(delayForNetworkResponse)
+                response
+            }
+
+            viewModel.loadingLiveData.observeForever { }
+            viewModel.userDetailsLiveData.observeForever { }
+
+            viewModel.getUserDetails("")
+
+            assertNotNull(viewModel.loadingLiveData.value)
+            assertTrue(viewModel.loadingLiveData.value == true)
+
+            advanceTimeBy(delayForNetworkResponse)
+
+            assertNotNull(viewModel.userDetailsLiveData.value)
+            assertEquals(response,viewModel.userDetailsLiveData.value)
+            assertTrue(viewModel.loadingLiveData.value == false)
+        }
+
+
+    @Test
+    fun `test getting user details with valid api response that throws exception should change loading state to true and false and errorState to Throwable`() =
+        coroutineDispatcher.runBlockingTest {
+            val response = Throwable()
+            coEvery { repositoryHelper.getUserDetails(ofType()) } coAnswers {
+                delay(delayForNetworkResponse)
+                throw response
+            }
+
+            viewModel.loadingLiveData.observeForever { }
+            viewModel.errorLiveData.observeForever { }
+
+            viewModel.getUserDetails("")
+
+            assertNotNull(viewModel.loadingLiveData.value)
+            assertTrue(viewModel.loadingLiveData.value == true)
+
+            advanceTimeBy(delayForNetworkResponse)
+
+            assertNotNull(viewModel.errorLiveData.value)
+            assertTrue(viewModel.errorLiveData.value is Throwable)
+            assertTrue(viewModel.loadingLiveData.value == false)
+        }
 }
