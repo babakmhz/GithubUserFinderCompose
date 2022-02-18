@@ -3,6 +3,8 @@ package com.babakmhz.githubuserfindercompose.di
 import com.babakmhz.githubuserfindercompose.BuildConfig
 import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.RepositoryImpl
+import com.babakmhz.githubuserfindercompose.data.network.ApiHelper
+import com.babakmhz.githubuserfindercompose.data.network.ApiHelperImpl
 import com.babakmhz.githubuserfindercompose.data.network.ApiService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
@@ -56,6 +58,10 @@ class ApplicationModule {
     @Provides
     @Singleton
     fun provideRepositoryHelper(repositoryImpl: RepositoryImpl) : RepositoryHelper = repositoryImpl
+
+    @Provides
+    @Singleton
+    fun provideApiHelper(apiHelperImpl: ApiHelperImpl):ApiHelper = apiHelperImpl
 
 
 }
