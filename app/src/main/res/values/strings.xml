@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GithubUserFinderCompose</string>
     <string name="id_d">id:%d</string>
+    <string name="nothing_mathces_the_query">Nothing matches the query :(</string>
 </resources>

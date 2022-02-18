@@ -23,7 +23,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
 @Composable
-fun userItem(
+fun UserItem(
     user: User,
     onClick: (User) -> Unit,
 ) {
@@ -91,30 +91,32 @@ fun userItem(
 @Preview
 @Composable
 fun previewUserItem() {
-    userItem(
-        user = User(
-            avatar_url = "https://avatars.githubusercontent.com/u/31562825?v=4",
-            events_url = "",
-            followers_url = "",
-            following_url = "",
-            gists_url = "",
-            gravatar_id = "",
-            html_url = "",
-            id = 10,
-            username = "babakmhz",
-            node_id = "",
-            organizations_url = "",
-            received_events_url = "",
-            repos_url = "",
-            score = null,
-            site_admin = false,
-            starred_url = "",
-            subscriptions_url = "",
-            type = "",
-            url = ""
-        )
+    UserItem(
+        user = fakeUser
     ) {
 
     }
 }
+
+val fakeUser = User(
+    avatar_url = "https://avatars.githubusercontent.com/u/31562825?v=4",
+    events_url = "",
+    followers_url = "",
+    following_url = "",
+    gists_url = "",
+    gravatar_id = "",
+    html_url = "",
+    id = 10,
+    username = "babakmhz",
+    node_id = "",
+    organizations_url = "",
+    received_events_url = "",
+    repos_url = "",
+    score = null,
+    site_admin = false,
+    starred_url = "",
+    subscriptions_url = "",
+    type = "",
+    url = ""
+)
 
