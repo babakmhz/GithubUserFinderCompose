@@ -19,7 +19,7 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserDetails(query: String, page: Int): User {
+    override suspend fun getUserDetails(user: User): User {
         TODO("Not yet implemented")
     }
 

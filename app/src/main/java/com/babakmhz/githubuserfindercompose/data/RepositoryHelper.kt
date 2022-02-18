@@ -10,6 +10,6 @@ interface RepositoryHelper {
     ): Flow<List<User>>
 
     suspend fun getUserDetails(
-        query: String, page: Int,
+        user:User
     ):User
 }
