@@ -17,7 +17,7 @@ class UserDetailsResponseToUserMapper : Mapper<UserDetailsNetworkResponse, User>
             gravatar_id = model.gravatar_id,
             html_url = model.html_url,
             id = model.id,
-            login = model.login,
+            username = model.login,
             node_id = model.node_id,
             organizations_url = model.organizations_url,
             received_events_url = model.received_events_url,

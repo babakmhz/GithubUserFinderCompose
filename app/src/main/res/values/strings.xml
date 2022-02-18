@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GithubUserFinderCompose</string>
+    <string name="id_d">id:%d</string>
 </resources>

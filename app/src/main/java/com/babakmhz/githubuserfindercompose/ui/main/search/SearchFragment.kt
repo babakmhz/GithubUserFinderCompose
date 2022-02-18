@@ -46,6 +46,7 @@ class SearchFragment : Fragment() {
                         snackbarHost = {
                             scaffoldState.snackbarHostState
                         }) {
+
                     }
                 }
             }

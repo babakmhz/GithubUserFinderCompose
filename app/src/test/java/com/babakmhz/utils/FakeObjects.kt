@@ -13,7 +13,7 @@ object FakeObjects {
         gravatar_id = "",
         html_url = "",
         id = 0,
-        login = "",
+        username = "",
         node_id = "",
         organizations_url = "",
         received_events_url = "",
