@@ -14,14 +14,13 @@ data class User(
     val organizations_url: String,
     val received_events_url: String,
     val repos_url: String,
-    val score: Double,
+    val score: Double? = null,
     val site_admin: Boolean,
     val starred_url: String,
     val subscriptions_url: String,
     val type: String,
-    val url: String,
-
-    ) {
+    val url: String
+) {
     var totalSearchResultsCount = 0
     var userDetails: UserDetails? = null
 }
