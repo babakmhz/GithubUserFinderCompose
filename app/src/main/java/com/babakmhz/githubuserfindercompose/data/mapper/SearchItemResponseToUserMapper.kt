@@ -46,7 +46,7 @@ class SearchItemResponseToUserMapper : Mapper<Item, User> {
             organizations_url = domainModel.organizations_url,
             received_events_url = domainModel.received_events_url,
             repos_url = domainModel.repos_url,
-            score = domainModel.score,
+            score = domainModel.score?:0.0,
             site_admin = domainModel.site_admin,
             starred_url = domainModel.starred_url,
             subscriptions_url = domainModel.subscriptions_url,
