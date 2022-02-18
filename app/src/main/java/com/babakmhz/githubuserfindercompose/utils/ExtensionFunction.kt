@@ -11,12 +11,12 @@ fun String?.validString() = this != null && this.isNotEmpty()
 
 
 fun CoroutineScope.launchWithException(
-    livedata: MutableLiveData<Throwable?>,
+    errorLiveData: MutableLiveData<Throwable?>,
     loading: MutableLiveData<Boolean>,
     block: suspend CoroutineScope.() -> Unit
 ): Job {
     return launch(CoroutineExceptionHandler { _, throwable ->
-        livedata.postValue(throwable)
+        errorLiveData.postValue(throwable)
         loading.postValue(false)
     }, block = block)
 }
