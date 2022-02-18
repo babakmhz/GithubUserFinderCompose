@@ -8,14 +8,18 @@ import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 
 const val SEARCH_DELAY = 2000L
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repositoryHelper: RepositoryHelper
+    private val repositoryHelper: RepositoryHelper,
+    private val flowDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     // using mutableState is also possible instead of livedata in case of composable UIs
@@ -48,7 +52,10 @@ class MainViewModel @Inject constructor(
                     page = 0
                     repositoryHelper.searchUsers(it, page)
                 }
-                .flowOn(viewModelScope.coroutineContext)
+                .flowOn(flowDispatcher)
+                .catch {
+                    Timber.e("exception in getting data from network")
+                }
                 .collect {
                     // emitting data
                     _searchUsersLiveData.postValue(it)
