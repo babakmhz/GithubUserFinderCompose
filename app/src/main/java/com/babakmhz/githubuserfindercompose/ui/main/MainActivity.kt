@@ -1,4 +1,4 @@
-package com.babakmhz.githubuserfindercompose
+package com.babakmhz.githubuserfindercompose.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
