@@ -4,6 +4,7 @@ import com.babakmhz.githubuserfindercompose.BuildConfig
 import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.RepositoryImpl
 import com.babakmhz.githubuserfindercompose.data.mapper.SearchItemResponseToUserMapper
+import com.babakmhz.githubuserfindercompose.data.mapper.UserDetailsResponseToUserMapper
 import com.babakmhz.githubuserfindercompose.data.network.ApiHelper
 import com.babakmhz.githubuserfindercompose.data.network.ApiHelperImpl
 import com.babakmhz.githubuserfindercompose.data.network.ApiService
@@ -69,4 +70,8 @@ class ApplicationModule {
     fun provideSearchItemResponseToUserMapper(): SearchItemResponseToUserMapper =
         SearchItemResponseToUserMapper()
 
+    @Provides
+    @Singleton
+    fun provideDetailsUserResponseToUserMapper(): UserDetailsResponseToUserMapper =
+        UserDetailsResponseToUserMapper()
 }

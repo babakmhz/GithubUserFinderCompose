@@ -1,6 +1,7 @@
 package com.babakmhz.githubuserfindercompose.data
 
 import com.babakmhz.githubuserfindercompose.data.mapper.SearchItemResponseToUserMapper
+import com.babakmhz.githubuserfindercompose.data.mapper.UserDetailsResponseToUserMapper
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.data.network.ApiHelper
 import kotlinx.coroutines.flow.Flow
@@ -10,7 +11,8 @@ import javax.inject.Inject
 
 class RepositoryImpl @Inject constructor(
     private val apiHelper: ApiHelper,
-    private val searchItemResponseToUserMapper: SearchItemResponseToUserMapper
+    private val searchItemResponseToUserMapper: SearchItemResponseToUserMapper,
+    private val detailsResponseToUserMapper: UserDetailsResponseToUserMapper
 ) : RepositoryHelper {
 
     override suspend fun searchUsers(query: String, page: Int): Flow<List<User>> {
@@ -19,8 +21,10 @@ class RepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUserDetails(username:String): User {
-        TODO()
+    override suspend fun getUserDetails(username: String): User {
+        return detailsResponseToUserMapper.mapToDomainModel(
+            apiHelper.getUserDetails(username = username)
+        )
     }
 
 

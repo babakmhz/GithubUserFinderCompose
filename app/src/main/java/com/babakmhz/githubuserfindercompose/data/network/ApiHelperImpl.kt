@@ -1,5 +1,6 @@
 package com.babakmhz.githubuserfindercompose.data.network
 
+import com.babakmhz.githubuserfindercompose.data.network.response.userDetails.UserDetailsNetworkResponse
 import com.babakmhz.githubuserfindercompose.data.network.response.userSearch.SearchResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -11,5 +12,9 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
         return flow {
             emit(apiService.searchUsers(name, page, page))
         }
+    }
+
+    override suspend fun getUserDetails(username: String): UserDetailsNetworkResponse {
+        return apiService.getUserDetails(username)
     }
 }
