@@ -26,7 +26,7 @@ class MainViewModel @Inject constructor(
     private var _errorState: MutableLiveData<Throwable?> = MutableLiveData(null)
     val errorState: LiveData<Throwable?> = _errorState
 
-    private var _searchUsersLiveData = MutableLiveData<List<User>>()
+    private var _searchUsersLiveData = MutableLiveData<List<User>>(arrayListOf())
     val searchUserLiveData: LiveData<List<User>> = _searchUsersLiveData
 
     private var _userDetailsLiveData = MutableLiveData<User>()
