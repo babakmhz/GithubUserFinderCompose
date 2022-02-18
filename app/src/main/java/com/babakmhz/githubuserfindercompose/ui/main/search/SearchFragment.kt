@@ -4,18 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.*
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
+import com.babakmhz.githubuserfindercompose.ui.components.UserList
 import com.babakmhz.githubuserfindercompose.ui.main.MainViewModel
 import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeTheme
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 class SearchFragment : Fragment() {
 
@@ -24,6 +31,7 @@ class SearchFragment : Fragment() {
     }
 
 
+    @ExperimentalCoroutinesApi
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -33,6 +41,10 @@ class SearchFragment : Fragment() {
 
                 val searchQuery = viewModel.searchQuery
                 val scaffoldState = rememberScaffoldState()
+                val loading by viewModel.loadingLiveData.observeAsState()
+                val usersList by viewModel.searchUserLiveData.observeAsState()
+                val error by viewModel.loadingLiveData.observeAsState()
+                val page = viewModel.page.value
 
                 GithubUserFinderComposeTheme() {
                     Scaffold(
@@ -47,6 +59,22 @@ class SearchFragment : Fragment() {
                             scaffoldState.snackbarHostState
                         }) {
 
+                        UserList(
+                            loading = loading!!,
+                            users = usersList!!,
+                            onChangeScrollPosition = {},
+                            page = page,
+                            onTriggerNextPage = { /*TODO*/ },
+                            onNavigateToDetailScreen = {
+
+                            }
+                        )
+                        if (loading == true){
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(24.dp)
+                            )
+                        }
                     }
                 }
             }
@@ -55,4 +83,6 @@ class SearchFragment : Fragment() {
 
     }
 }
+
+
 

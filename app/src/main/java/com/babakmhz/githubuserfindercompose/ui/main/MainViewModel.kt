@@ -11,6 +11,7 @@ import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 
 const val SEARCH_DELAY = 3000L
@@ -36,7 +37,7 @@ class MainViewModel @Inject constructor(
     val userDetailsLiveData: LiveData<User> = _userDetailsLiveData
 
     val searchQuery = mutableStateOf("")
-    private var page = 0
+    val page = mutableStateOf(1)
 
     fun searchUsers(queryFlow: StateFlow<String>) =
         viewModelScope.launchWithException(_errorState, _loadingState) {
@@ -50,8 +51,8 @@ class MainViewModel @Inject constructor(
                 .flatMapLatest {
                     // getting result of last input with page 0 as it's a new input change
                     _loadingState.postValue(true)
-                    page = 0
-                    repositoryHelper.searchUsers(it, page)
+                    page.value = 1
+                    repositoryHelper.searchUsers(it, page.value)
                 }
                 .flowOn(flowDispatcher)
                 .catch { e ->
@@ -62,6 +63,7 @@ class MainViewModel @Inject constructor(
                     // emitting data
                     _loadingState.postValue(false)
                     _searchUsersLiveData.postValue(it)
+                    Timber.i("api result... $it")
                 }
         }
 
