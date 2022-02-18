@@ -9,9 +9,7 @@ import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
-import timber.log.Timber
 import javax.inject.Inject
 
 const val SEARCH_DELAY = 2000L
@@ -25,10 +23,10 @@ class MainViewModel @Inject constructor(
     // using mutableState is also possible instead of livedata in case of composable UIs
 
     private var _loadingState = MutableLiveData(false)
-    val loadingState: LiveData<Boolean> = _loadingState
+    val loadingLiveData: LiveData<Boolean> = _loadingState
 
     private var _errorState: MutableLiveData<Throwable?> = MutableLiveData(null)
-    val errorState: LiveData<Throwable?> = _errorState
+    val errorLiveData: LiveData<Throwable?> = _errorState
 
     private var _searchUsersLiveData = MutableLiveData<List<User>>(arrayListOf())
     val searchUserLiveData: LiveData<List<User>> = _searchUsersLiveData
@@ -49,15 +47,18 @@ class MainViewModel @Inject constructor(
                 .debounce(SEARCH_DELAY) // making sure user is complete with typing
                 .flatMapLatest {
                     // getting result of last input with page 0 as it's a new input change
+                    _loadingState.postValue(true)
                     page = 0
                     repositoryHelper.searchUsers(it, page)
                 }
                 .flowOn(flowDispatcher)
-                .catch {
-                    Timber.e("exception in getting data from network")
+                .catch { e ->
+                    _loadingState.postValue(false)
+                    _errorState.postValue(e)
                 }
                 .collect {
                     // emitting data
+                    _loadingState.postValue(false)
                     _searchUsersLiveData.postValue(it)
                 }
         }
@@ -65,7 +66,9 @@ class MainViewModel @Inject constructor(
 
     fun getUserDetails(username: String) =
         viewModelScope.launchWithException(_errorState, _loadingState) {
+            _loadingState.postValue(true)
             val response = repositoryHelper.getUserDetails(username)
+            _loadingState.postValue(false)
             _userDetailsLiveData.postValue(response)
         }
 }
