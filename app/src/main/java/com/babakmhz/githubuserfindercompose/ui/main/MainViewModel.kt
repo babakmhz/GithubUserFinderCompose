@@ -11,7 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 
-const val SEARCH_DELAY =  2000L
+const val SEARCH_DELAY = 2000L
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -27,7 +27,10 @@ class MainViewModel @Inject constructor(
     val errorState: LiveData<Throwable?> = _errorState
 
     private var _searchUsersLiveData = MutableLiveData<List<User>>()
-    val searchUserLiveData :LiveData<List<User>> = _searchUsersLiveData
+    val searchUserLiveData: LiveData<List<User>> = _searchUsersLiveData
+
+    private var _userDetailsLiveData = MutableLiveData<User>()
+    val userDetailsLiveData: LiveData<User> = _userDetailsLiveData
 
     private var page = 0
 
@@ -35,20 +38,27 @@ class MainViewModel @Inject constructor(
         viewModelScope.launchWithException(_errorState, _loadingState) {
 
             queryFlow.filter { username ->
-                //for filtering unwanted network calls and handling rate limits
+                //for avoiding unwanted network calls and handling rate limits
                 return@filter username.isNotEmpty()
-
-            }.distinctUntilChanged()
-                .debounce(SEARCH_DELAY) // handing if user complete with typing
+            }
+                .distinctUntilChanged()
+                .debounce(SEARCH_DELAY) // making sure user is complete with typing
                 .flatMapLatest {
                     // getting result of last input with page 0 as it's a new input change
                     page = 0
-                    repositoryHelper.searchUsers(it,page)
+                    repositoryHelper.searchUsers(it, page)
                 }
                 .flowOn(viewModelScope.coroutineContext)
                 .collect {
                     // emitting data
                     _searchUsersLiveData.postValue(it)
                 }
+        }
+
+
+    fun getUserDetails(username: String) =
+        viewModelScope.launchWithException(_errorState, _loadingState) {
+            val response = repositoryHelper.getUserDetails(username)
+            _userDetailsLiveData.postValue(response)
         }
 }
