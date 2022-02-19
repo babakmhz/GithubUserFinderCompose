@@ -9,11 +9,14 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import timber.log.Timber
 
 
 @ExperimentalMaterialApi
@@ -26,14 +29,14 @@ fun UserList(
     page: Int,
     onTriggerNextPage: () -> Unit,
     onNavigateToDetailScreen: (Int) -> Unit,
-    scrollToTop: Boolean = true
+    scrollToTop:Boolean = false
 ) {
     Box(
         modifier = Modifier
             .background(color = MaterialTheme.colors.surface)
     ) {
-
-        LazyColumn {
+        val listState = rememberLazyListState()
+        LazyColumn(state = listState) {
             itemsIndexed(
                 items = users
             ) { index, user ->
@@ -50,8 +53,14 @@ fun UserList(
                 )
             }
         }
+        LaunchedEffect(key1 = scrollToTop){
+            if (scrollToTop){
+                this.launch {
+                    listState.scrollToItem(0)
+                }
+            }
 
-
+        }
 
     }
 }

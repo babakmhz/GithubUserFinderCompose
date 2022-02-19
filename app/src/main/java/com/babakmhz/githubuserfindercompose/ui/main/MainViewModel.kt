@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -42,6 +41,7 @@ class MainViewModel @Inject constructor(
 
     private var usersListScrollPosition = 0
 
+    val shouldScrollListToTop = mutableStateOf(false)
 
     @FlowPreview
     fun registerSearchFlow(queryFlow: StateFlow<String>) =
@@ -57,7 +57,6 @@ class MainViewModel @Inject constructor(
                     _loadingState.postValue(true)
                     page.value = 1
                     repositoryHelper.searchUsers(it, page.value)
-
                 }.catch { e ->
                     _loadingState.postValue(false)
                     _errorState.postValue(e)
@@ -67,11 +66,17 @@ class MainViewModel @Inject constructor(
                     // emitting data
                     _loadingState.postValue(false)
                     _searchUsersLiveData.postValue(it)
+                    setShouldScrollListToTopState(true)
                 }
         }
 
     fun onChangeRecipeScrollPosition(position: Int) {
         usersListScrollPosition = position
+    }
+
+    private fun setShouldScrollListToTopState(scrollToTop: Boolean) {
+        shouldScrollListToTop.value = scrollToTop
+        onChangeRecipeScrollPosition(if (scrollToTop) 0 else usersListScrollPosition)
     }
 
     fun getQueryNextPage() {
@@ -90,6 +95,8 @@ class MainViewModel @Inject constructor(
                         result.addAll(it.toList())
                         _searchUsersLiveData.postValue(result)
                         _loadingState.postValue(false)
+                        setShouldScrollListToTopState(false)
+
                     }
             }
         }

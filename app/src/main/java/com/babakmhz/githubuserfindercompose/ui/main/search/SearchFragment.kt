@@ -36,7 +36,6 @@ class SearchFragment : Fragment() {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
-    private var _searchQuery = ""
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(
@@ -52,6 +51,7 @@ class SearchFragment : Fragment() {
                 val usersList by viewModel.searchUsersLiveData.observeAsState()
                 val error by viewModel.loadingLiveData.observeAsState()
                 val page = viewModel.page.value
+                val shouldScrollToTop = viewModel.shouldScrollListToTop
                 val searchStateFlow = MutableStateFlow("")
                 viewModel.registerSearchFlow(searchStateFlow)
                 GithubUserFinderComposeTheme {
@@ -82,7 +82,7 @@ class SearchFragment : Fragment() {
                             onNavigateToDetailScreen = {
 
                             },
-                            scrollToTop = searchQuery.value!=_searchQuery
+                            scrollToTop = shouldScrollToTop.value
                         )
                         if (loading == true) {
                             CircularProgressIndicator(
@@ -91,7 +91,6 @@ class SearchFragment : Fragment() {
 
                             )
                         }
-                        _searchQuery = searchQuery.value
                     }
                 }
             }
