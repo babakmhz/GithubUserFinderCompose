@@ -4,17 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
@@ -67,34 +69,46 @@ class SearchFragment : Fragment() {
                             scaffoldState.snackbarHostState
                         }) {
 
-                        UserList(
-                            loading = loading!!,
-                            users = usersList!!,
-                            onChangeScrollPosition = {
-                                viewModel.onChangeSearchListScrollPosition(it)
-                            },
-                            page = page,
-                            onTriggerNextPage = {
-                                viewModel.getQueryNextPage()
-                            },
-                            onNavigateToDetailScreen = {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                        ) {
 
-                            },
-                        )
-                        if (loading == true) {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(24.dp)
+                            UserList(
+                                loading = loading!!,
+                                users = usersList!!,
+                                onChangeScrollPosition = {
+                                    viewModel.onChangeSearchListScrollPosition(it)
+                                },
+                                page = page,
+                                onTriggerNextPage = {
+                                    viewModel.getQueryNextPage()
+                                },
+                                onNavigateToDetailScreen = {
 
+                                },
                             )
-                        }
+                            if (loading == true) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier
+                                        .padding(24.dp)
+                                        .align(Alignment.Center)
+
+                                )
+                            }
+
                     }
                 }
             }
         }
-
-
     }
+
+
+}
+
+
 }
 
 
