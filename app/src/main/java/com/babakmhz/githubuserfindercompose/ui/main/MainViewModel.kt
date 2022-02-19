@@ -54,13 +54,12 @@ class MainViewModel @Inject constructor(
                     // getting result of last input with page 0 as it's a new input change
                     _loadingState.postValue(true)
                     page.value = 1
-                    repositoryHelper.searchUsers(it, page.value).catch { e ->
-                        _loadingState.postValue(false)
-                        _errorState.postValue(e)
-                    }
+                    repositoryHelper.searchUsers(it, page.value)
 
-                }
-                .flowOn(flowDispatcher)
+                }.catch { e ->
+                    _loadingState.postValue(false)
+                    _errorState.postValue(e)
+                }.flowOn(flowDispatcher)
 
                 .collect {
                     // emitting data
