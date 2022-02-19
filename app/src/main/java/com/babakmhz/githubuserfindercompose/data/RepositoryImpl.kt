@@ -5,6 +5,7 @@ import com.babakmhz.githubuserfindercompose.data.mapper.UserDetailsResponseToUse
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.data.network.ApiHelper
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -19,6 +20,7 @@ class RepositoryImpl @Inject constructor(
         return apiHelper.searchUsers(name = query, page = page).map {
             searchItemResponseToUserMapper.mapListItemsToListUsers(it)
         }
+//        return flowOf()
     }
 
     override suspend fun getUserDetails(username: String): User {

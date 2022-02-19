@@ -1,8 +1,8 @@
 package com.babakmhz.githubuserfindercompose.utils
 
 import android.app.Application
+import com.babakmhz.githubuserfindercompose.BuildConfig
 import dagger.hilt.android.HiltAndroidApp
-import io.objectbox.android.BuildConfig
 import timber.log.Timber
 
 @HiltAndroidApp

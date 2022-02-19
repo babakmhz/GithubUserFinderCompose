@@ -4,13 +4,15 @@ import com.babakmhz.githubuserfindercompose.data.network.response.userDetails.Us
 import com.babakmhz.githubuserfindercompose.data.network.response.userSearch.SearchResponse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : ApiHelper {
 
-    override suspend fun searchUsers(name: String, page: Int, pageSize: Int): Flow<SearchResponse> {
+    override suspend fun searchUsers(name: String, page: Int, perPage: Int): Flow<SearchResponse> {
         return flow {
-            emit(apiService.searchUsers(name, page, page))
+            Timber.i("emitting from apiHelperImpl...")
+            emit(apiService.searchUsers(name, page, perPage))
         }
     }
 

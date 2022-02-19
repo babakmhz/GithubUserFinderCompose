@@ -77,7 +77,7 @@ class MainViewModelTest {
             }
             val initialLiveDataState = viewModel.searchUserLiveData.value
 
-            viewModel.searchUsers(MutableStateFlow(""))
+            viewModel.registerSearchFlow(MutableStateFlow(""))
             advanceTimeBy(delayForNetworkResponse)
             assertNotNull(viewModel.searchUserLiveData.value)
             assertEquals(initialLiveDataState, viewModel.searchUserLiveData.value)
@@ -96,7 +96,7 @@ class MainViewModelTest {
             viewModel.searchUserLiveData.observeForever {}
             viewModel.loadingLiveData.observeForever {}
 
-            viewModel.searchUsers(generateFakeFlow())
+            viewModel.registerSearchFlow(generateFakeFlow())
 
             assertNotNull(viewModel.searchUserLiveData.value)
             assertNotNull(viewModel.loadingLiveData.value)
@@ -123,7 +123,7 @@ class MainViewModelTest {
             viewModel.errorLiveData.observeForever {}
             viewModel.loadingLiveData.observeForever { }
 
-            viewModel.searchUsers(generateFakeFlow())
+            viewModel.registerSearchFlow(generateFakeFlow())
 
             assertNotNull(viewModel.loadingLiveData.value)
             advanceTimeBy(SEARCH_DELAY)

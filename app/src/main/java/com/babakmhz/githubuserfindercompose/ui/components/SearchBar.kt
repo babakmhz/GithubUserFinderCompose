@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.StateFlow
 @Composable
 fun SearchBar(
     query: MutableState<String>,
-    onQueryChanged: (StateFlow<String>) -> Unit,
+    onQueryChanged: (String) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Surface(
@@ -49,11 +49,7 @@ fun SearchBar(
                     value = query.value,
                     onValueChange = {
                         query.value = it
-                        val stateFlow = MutableStateFlow("")
-                        if (stateFlow.value != it) {
-                            stateFlow.value = it
-                        }
-                        onQueryChanged(stateFlow)
+                        onQueryChanged(it)
                     },
                     label = { Text(text = "Search") },
                     keyboardOptions = KeyboardOptions(

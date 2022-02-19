@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.*
+import androidx.compose.material.CircularProgressIndicator
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -20,8 +22,11 @@ import com.babakmhz.githubuserfindercompose.ui.components.UserList
 import com.babakmhz.githubuserfindercompose.ui.main.MainViewModel
 import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableStateFlow
 
 
+@FlowPreview
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 class SearchFragment : Fragment() {
@@ -45,13 +50,16 @@ class SearchFragment : Fragment() {
                 val usersList by viewModel.searchUserLiveData.observeAsState()
                 val error by viewModel.loadingLiveData.observeAsState()
                 val page = viewModel.page.value
-
+                val searchStateFlow = MutableStateFlow("")
+                viewModel.registerSearchFlow(searchStateFlow)
                 GithubUserFinderComposeTheme() {
                     Scaffold(
                         topBar = {
                             SearchBar(
                                 query = searchQuery,
-                                onQueryChanged = viewModel::searchUsers,
+                                onQueryChanged = {
+                                    searchStateFlow.value = it
+                                },
                             )
                         },
                         scaffoldState = scaffoldState,
@@ -69,7 +77,7 @@ class SearchFragment : Fragment() {
 
                             }
                         )
-                        if (loading == true){
+                        if (loading == true) {
                             CircularProgressIndicator(
                                 modifier = Modifier
                                     .padding(24.dp)

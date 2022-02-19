@@ -10,7 +10,9 @@ import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -39,31 +41,31 @@ class MainViewModel @Inject constructor(
     val searchQuery = mutableStateOf("")
     val page = mutableStateOf(1)
 
-    fun searchUsers(queryFlow: StateFlow<String>) =
-        viewModelScope.launchWithException(_errorState, _loadingState) {
-
-            queryFlow.filter { username ->
-                //for avoiding unwanted network calls and handling rate limits
-                return@filter username.isNotEmpty()
-            }
-                .distinctUntilChanged()
-                .debounce(SEARCH_DELAY) // making sure user is complete with typing
+    @FlowPreview
+    fun registerSearchFlow(queryFlow: StateFlow<String>) =
+        viewModelScope.launch(flowDispatcher) {
+            queryFlow.debounce(SEARCH_DELAY)
+                .filter { username ->
+                    //for avoiding unwanted network calls and handling rate limits
+                    return@filter username.isNotEmpty()
+                }
+                // making sure user is complete with typing
                 .flatMapLatest {
                     // getting result of last input with page 0 as it's a new input change
                     _loadingState.postValue(true)
                     page.value = 1
-                    repositoryHelper.searchUsers(it, page.value)
+                    repositoryHelper.searchUsers(it, page.value).catch { e ->
+                        _loadingState.postValue(false)
+                        _errorState.postValue(e)
+                    }
+
                 }
                 .flowOn(flowDispatcher)
-                .catch { e ->
-                    _loadingState.postValue(false)
-                    _errorState.postValue(e)
-                }
+
                 .collect {
                     // emitting data
                     _loadingState.postValue(false)
                     _searchUsersLiveData.postValue(it)
-                    Timber.i("api result... $it")
                 }
         }
 

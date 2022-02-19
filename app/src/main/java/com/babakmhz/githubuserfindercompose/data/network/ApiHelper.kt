@@ -9,7 +9,7 @@ interface ApiHelper {
     suspend fun searchUsers(
         name: String,
         page: Int,
-        pageSize: Int = Constants.PAGE_SIZE
+        perPage: Int = Constants.PAGE_SIZE
     ): Flow<SearchResponse>
 
     suspend fun getUserDetails(
