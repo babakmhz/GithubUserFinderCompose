@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.babakmhz.githubuserfindercompose.data.model.User
@@ -24,6 +26,7 @@ fun UserList(
     page: Int,
     onTriggerNextPage: () -> Unit,
     onNavigateToDetailScreen: (Int) -> Unit,
+    scrollToTop: Boolean = true
 ) {
     Box(
         modifier = Modifier
@@ -38,6 +41,7 @@ fun UserList(
                 if ((index + 1) >= (page * PAGE_SIZE) && !loading) {
                     onTriggerNextPage()
                 }
+
                 UserItem(
                     user = user,
                     onClick = {
@@ -46,6 +50,9 @@ fun UserList(
                 )
             }
         }
+
+
+
     }
 }
 

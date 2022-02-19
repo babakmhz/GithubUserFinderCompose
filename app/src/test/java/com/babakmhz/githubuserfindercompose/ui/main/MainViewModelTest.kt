@@ -72,15 +72,15 @@ class MainViewModelTest {
                 delay(delayForNetworkResponse)
                 flowOf(emptySearchResultFromApi)
             }
-            viewModel.searchUserLiveData.observeForever {
+            viewModel.searchUsersLiveData.observeForever {
 
             }
-            val initialLiveDataState = viewModel.searchUserLiveData.value
+            val initialLiveDataState = viewModel.searchUsersLiveData.value
 
             viewModel.registerSearchFlow(MutableStateFlow(""))
             advanceTimeBy(delayForNetworkResponse)
-            assertNotNull(viewModel.searchUserLiveData.value)
-            assertEquals(initialLiveDataState, viewModel.searchUserLiveData.value)
+            assertNotNull(viewModel.searchUsersLiveData.value)
+            assertEquals(initialLiveDataState, viewModel.searchUsersLiveData.value)
         }
 
     @Test
@@ -93,19 +93,19 @@ class MainViewModelTest {
                 flowOf(userResponse)
             }
 
-            viewModel.searchUserLiveData.observeForever {}
+            viewModel.searchUsersLiveData.observeForever {}
             viewModel.loadingLiveData.observeForever {}
 
             viewModel.registerSearchFlow(generateFakeFlow())
 
-            assertNotNull(viewModel.searchUserLiveData.value)
+            assertNotNull(viewModel.searchUsersLiveData.value)
             assertNotNull(viewModel.loadingLiveData.value)
 
             advanceTimeBy(SEARCH_DELAY)
             assertEquals(viewModel.loadingLiveData.value, true)
             // waiting for network Response in queryFlow that we previously had
             advanceTimeBy(delayForNetworkResponse)
-            assertEquals(userResponse, viewModel.searchUserLiveData.value)
+            assertEquals(userResponse, viewModel.searchUsersLiveData.value)
             assertEquals(viewModel.loadingLiveData.value, false)
         }
 

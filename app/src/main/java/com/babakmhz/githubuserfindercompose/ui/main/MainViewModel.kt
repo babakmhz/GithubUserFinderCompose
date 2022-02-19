@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.model.User
+import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE
 import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -15,8 +16,6 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
-
-const val SEARCH_DELAY = 3000L
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -33,13 +32,16 @@ class MainViewModel @Inject constructor(
     val errorLiveData: LiveData<Throwable?> = _errorState
 
     private var _searchUsersLiveData = MutableLiveData<List<User>>(arrayListOf())
-    val searchUserLiveData: LiveData<List<User>> = _searchUsersLiveData
+    val searchUsersLiveData: LiveData<List<User>> = _searchUsersLiveData
 
     private var _userDetailsLiveData = MutableLiveData<User>()
     val userDetailsLiveData: LiveData<User> = _userDetailsLiveData
 
     val searchQuery = mutableStateOf("")
     val page = mutableStateOf(1)
+
+    private var usersListScrollPosition = 0
+
 
     @FlowPreview
     fun registerSearchFlow(queryFlow: StateFlow<String>) =
@@ -68,6 +70,31 @@ class MainViewModel @Inject constructor(
                 }
         }
 
+    fun onChangeRecipeScrollPosition(position: Int) {
+        usersListScrollPosition = position
+    }
+
+    fun getQueryNextPage() {
+        if ((usersListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
+            viewModelScope.launch {
+                _loadingState.postValue(true)
+                page.value++
+                repositoryHelper.searchUsers(searchQuery.value, page.value)
+                    .catch { e ->
+                        _errorState.postValue(e)
+                        _loadingState.postValue(false)
+                    }.collect {
+                        val previousResult = searchUsersLiveData.value
+                        val result = ArrayList<User>()
+                        result.addAll(previousResult!!.toList())
+                        result.addAll(it.toList())
+                        _searchUsersLiveData.postValue(result)
+                        _loadingState.postValue(false)
+                    }
+            }
+        }
+
+    }
 
     fun getUserDetails(username: String) =
         viewModelScope.launchWithException(_errorState, _loadingState) {
@@ -77,3 +104,6 @@ class MainViewModel @Inject constructor(
             _userDetailsLiveData.postValue(response)
         }
 }
+
+const val SEARCH_DELAY = 3000L
+

@@ -24,6 +24,7 @@ import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeThem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import timber.log.Timber
 
 
 @FlowPreview
@@ -35,6 +36,7 @@ class SearchFragment : Fragment() {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
+    private var _searchQuery = ""
 
     @ExperimentalCoroutinesApi
     override fun onCreateView(
@@ -47,12 +49,12 @@ class SearchFragment : Fragment() {
                 val searchQuery = viewModel.searchQuery
                 val scaffoldState = rememberScaffoldState()
                 val loading by viewModel.loadingLiveData.observeAsState()
-                val usersList by viewModel.searchUserLiveData.observeAsState()
+                val usersList by viewModel.searchUsersLiveData.observeAsState()
                 val error by viewModel.loadingLiveData.observeAsState()
                 val page = viewModel.page.value
                 val searchStateFlow = MutableStateFlow("")
                 viewModel.registerSearchFlow(searchStateFlow)
-                GithubUserFinderComposeTheme() {
+                GithubUserFinderComposeTheme {
                     Scaffold(
                         topBar = {
                             SearchBar(
@@ -70,19 +72,26 @@ class SearchFragment : Fragment() {
                         UserList(
                             loading = loading!!,
                             users = usersList!!,
-                            onChangeScrollPosition = {},
+                            onChangeScrollPosition = {
+                                viewModel.onChangeRecipeScrollPosition(it)
+                            },
                             page = page,
-                            onTriggerNextPage = { /*TODO*/ },
+                            onTriggerNextPage = {
+                                viewModel.getQueryNextPage()
+                            },
                             onNavigateToDetailScreen = {
 
-                            }
+                            },
+                            scrollToTop = searchQuery.value!=_searchQuery
                         )
                         if (loading == true) {
                             CircularProgressIndicator(
                                 modifier = Modifier
                                     .padding(24.dp)
+
                             )
                         }
+                        _searchQuery = searchQuery.value
                     }
                 }
             }
