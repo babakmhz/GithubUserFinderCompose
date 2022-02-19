@@ -22,8 +22,6 @@ class MainViewModel @Inject constructor(
     private val flowDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
-    // using mutableState is also possible instead of livedata in case of composable UIs
-
     private var _loadingState = MutableLiveData(false)
     val loadingLiveData: LiveData<Boolean> = _loadingState
 
@@ -41,7 +39,6 @@ class MainViewModel @Inject constructor(
 
     private var usersListScrollPosition = 0
 
-    val shouldScrollListToTop = mutableStateOf(false)
 
     @FlowPreview
     fun registerSearchFlow(queryFlow: StateFlow<String>) =
@@ -55,8 +52,8 @@ class MainViewModel @Inject constructor(
                 .flatMapLatest {
                     // getting result of last input with page 0 as it's a new input change
                     _loadingState.postValue(true)
-                    page.value = 1
-                    repositoryHelper.searchUsers(it, page.value)
+                    prepareForNewSearch()
+                    repositoryHelper.searchUsers(it, page=1)
                 }.catch { e ->
                     _loadingState.postValue(false)
                     _errorState.postValue(e)
@@ -66,17 +63,17 @@ class MainViewModel @Inject constructor(
                     // emitting data
                     _loadingState.postValue(false)
                     _searchUsersLiveData.postValue(it)
-                    setShouldScrollListToTopState(true)
                 }
         }
 
-    fun onChangeRecipeScrollPosition(position: Int) {
+    fun onChangeSearchListScrollPosition(position: Int) {
         usersListScrollPosition = position
     }
 
-    private fun setShouldScrollListToTopState(scrollToTop: Boolean) {
-        shouldScrollListToTop.value = scrollToTop
-        onChangeRecipeScrollPosition(if (scrollToTop) 0 else usersListScrollPosition)
+    private fun prepareForNewSearch(){
+        _searchUsersLiveData.postValue(listOf())
+        page.value = 1
+        onChangeSearchListScrollPosition(0)
     }
 
     fun getQueryNextPage() {
@@ -95,8 +92,6 @@ class MainViewModel @Inject constructor(
                         result.addAll(it.toList())
                         _searchUsersLiveData.postValue(result)
                         _loadingState.postValue(false)
-                        setShouldScrollListToTopState(false)
-
                     }
             }
         }

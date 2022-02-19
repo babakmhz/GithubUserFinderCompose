@@ -25,18 +25,17 @@ import timber.log.Timber
 fun UserList(
     loading: Boolean,
     users: List<User>,
-    onChangeScrollPosition: (Int) -> Unit,
+    onChangeScrollPosition: (Int) -> Unit = {},
     page: Int,
-    onTriggerNextPage: () -> Unit,
+    onTriggerNextPage: () -> Unit = {},
     onNavigateToDetailScreen: (Int) -> Unit,
-    scrollToTop:Boolean = false
 ) {
     Box(
         modifier = Modifier
             .background(color = MaterialTheme.colors.surface)
     ) {
-        val listState = rememberLazyListState()
-        LazyColumn(state = listState) {
+
+        LazyColumn() {
             itemsIndexed(
                 items = users
             ) { index, user ->
@@ -53,14 +52,7 @@ fun UserList(
                 )
             }
         }
-        LaunchedEffect(key1 = scrollToTop){
-            if (scrollToTop){
-                this.launch {
-                    listState.scrollToItem(0)
-                }
-            }
 
-        }
 
     }
 }

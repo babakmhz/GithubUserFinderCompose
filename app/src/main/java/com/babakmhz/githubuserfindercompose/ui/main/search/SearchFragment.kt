@@ -24,7 +24,6 @@ import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeThem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import timber.log.Timber
 
 
 @FlowPreview
@@ -51,7 +50,6 @@ class SearchFragment : Fragment() {
                 val usersList by viewModel.searchUsersLiveData.observeAsState()
                 val error by viewModel.loadingLiveData.observeAsState()
                 val page = viewModel.page.value
-                val shouldScrollToTop = viewModel.shouldScrollListToTop
                 val searchStateFlow = MutableStateFlow("")
                 viewModel.registerSearchFlow(searchStateFlow)
                 GithubUserFinderComposeTheme {
@@ -73,7 +71,7 @@ class SearchFragment : Fragment() {
                             loading = loading!!,
                             users = usersList!!,
                             onChangeScrollPosition = {
-                                viewModel.onChangeRecipeScrollPosition(it)
+                                viewModel.onChangeSearchListScrollPosition(it)
                             },
                             page = page,
                             onTriggerNextPage = {
@@ -82,7 +80,6 @@ class SearchFragment : Fragment() {
                             onNavigateToDetailScreen = {
 
                             },
-                            scrollToTop = shouldScrollToTop.value
                         )
                         if (loading == true) {
                             CircularProgressIndicator(
