@@ -14,21 +14,15 @@
         <action
             android:id="@+id/action_searchFragment_to_detailsFragment"
             app:destination="@id/detailsFragment" />
-        <action
-            android:id="@+id/action_searchFragment_to_detailsFragment2"
-            app:destination="@id/detailsFragment2" />
+
     </fragment>
+
     <dialog
         android:id="@+id/detailsFragment"
-        android:name="com.babakmhz.githubuserfindercompose.DetailsFragment"
-        android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
-    <fragment
-        android:id="@+id/detailsFragment2"
         android:name="com.babakmhz.githubuserfindercompose.ui.main.details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
             android:name="username"
             app:argType="string" />
-    </fragment>
+    </dialog>
 </navigation>
