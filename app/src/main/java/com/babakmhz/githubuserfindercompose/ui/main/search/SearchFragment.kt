@@ -20,12 +20,11 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.findNavController
 import com.babakmhz.githubuserfindercompose.ui.components.ConnectionErrorWithRetry
-import com.babakmhz.githubuserfindercompose.ui.components.LoadingWithRetryIndicator
+import com.babakmhz.githubuserfindercompose.ui.components.LoadingIndicator
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
 import com.babakmhz.githubuserfindercompose.ui.components.UserList
-import com.babakmhz.githubuserfindercompose.ui.components.util.SnackbarController
 import com.babakmhz.githubuserfindercompose.ui.main.MainViewModel
 import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,7 +40,6 @@ class SearchFragment : Fragment() {
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
-
 
 
     @ExperimentalCoroutinesApi
@@ -93,11 +91,13 @@ class SearchFragment : Fragment() {
                                     viewModel.getQueryNextPage()
                                 },
                                 onNavigateToDetailScreen = {
-
+                                    val action =
+                                        SearchFragmentDirections.actionSearchFragmentToDetailsFragment(it)
+                                    findNavController().navigate(action)
                                 },
                             )
                             if (loading == true) {
-                                LoadingWithRetryIndicator(
+                                LoadingIndicator(
                                     modifier =
                                     Modifier
                                         .padding(24.dp)

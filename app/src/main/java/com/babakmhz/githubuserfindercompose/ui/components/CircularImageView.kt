@@ -20,10 +20,6 @@ import com.babakmhz.githubuserfindercompose.R
 fun CircularImage(imageUrl: String) {
 
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
 

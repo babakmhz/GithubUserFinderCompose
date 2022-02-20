@@ -28,7 +28,7 @@ fun UserList(
     onChangeScrollPosition: (Int) -> Unit = {},
     page: Int,
     onTriggerNextPage: () -> Unit = {},
-    onNavigateToDetailScreen: (Int) -> Unit,
+    onNavigateToDetailScreen: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -47,7 +47,7 @@ fun UserList(
                 UserItem(
                     user = user,
                     onClick = {
-                        onNavigateToDetailScreen(user.id)
+                        onNavigateToDetailScreen(user.username)
                     }
                 )
             }

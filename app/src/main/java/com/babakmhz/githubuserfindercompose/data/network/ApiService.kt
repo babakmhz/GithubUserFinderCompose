@@ -18,6 +18,6 @@ interface ApiService {
         @Query("per_page") pageSize: Int
     ): SearchResponse
 
-    @GET(USER_DETAIL)
-    suspend fun getUserDetails(@Path(Constants.DETAILS_USERNAME_PATH_VALUE) username:String): UserDetailsNetworkResponse
+    @GET("$USER_DETAIL/{username}")
+    suspend fun getUserDetails(@Path("username") username:String): UserDetailsNetworkResponse
 }
