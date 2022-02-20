@@ -49,7 +49,6 @@ class DetailsFragment : BottomSheetDialogFragment() {
         ComposeView(requireContext()).apply {
             setContent {
                 val user by viewModel.userDetailsLiveData.observeAsState()
-                val error by viewModel.errorLiveData.observeAsState()
                 user?.let {
                     DetailsScreen(user = it, onOpenProfileClicked = { url->
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
@@ -60,7 +59,10 @@ class DetailsFragment : BottomSheetDialogFragment() {
             }
         }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        viewModel.onDetailsFragmentDestroyed()
+    }
 }
 
 @Composable

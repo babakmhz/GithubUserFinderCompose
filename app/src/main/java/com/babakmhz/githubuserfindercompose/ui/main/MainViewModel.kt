@@ -32,8 +32,8 @@ class MainViewModel @Inject constructor(
     private var _searchUsersLiveData = MutableLiveData<List<User>>(arrayListOf())
     val searchUsersLiveData: LiveData<List<User>> = _searchUsersLiveData
 
-    private var _userDetailsLiveData = MutableLiveData<User>()
-    val userDetailsLiveData: LiveData<User> = _userDetailsLiveData
+    private var _userDetailsLiveData = MutableLiveData<User?>()
+    val userDetailsLiveData: LiveData<User?> = _userDetailsLiveData
 
     val searchQuery = mutableStateOf("")
     val page = mutableStateOf(1)
@@ -133,6 +133,9 @@ class MainViewModel @Inject constructor(
                 _searchUsersLiveData.postValue(it)
             }
     }
+
+
+    fun onDetailsFragmentDestroyed() = _userDetailsLiveData.postValue(null)
 }
 
 const val SEARCH_DELAY = 1500L
