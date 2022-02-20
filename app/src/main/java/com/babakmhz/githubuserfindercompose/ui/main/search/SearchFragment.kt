@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -17,10 +18,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import com.babakmhz.githubuserfindercompose.R
 import com.babakmhz.githubuserfindercompose.ui.components.ConnectionErrorWithRetry
 import com.babakmhz.githubuserfindercompose.ui.components.LoadingIndicator
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
@@ -92,7 +95,9 @@ class SearchFragment : Fragment() {
                                 },
                                 onNavigateToDetailScreen = {
                                     val action =
-                                        SearchFragmentDirections.actionSearchFragmentToDetailsFragment(it)
+                                        SearchFragmentDirections.actionSearchFragmentToDetailsFragment(
+                                            it
+                                        )
                                     findNavController().navigate(action)
                                 },
                             )
@@ -102,6 +107,13 @@ class SearchFragment : Fragment() {
                                     Modifier
                                         .padding(24.dp)
                                         .align(if (usersList.isNullOrEmpty()) Alignment.Center else Alignment.BottomEnd)
+                                )
+                            }
+
+                            if (usersList!!.isEmpty() && loading == false) {
+                                Text(
+                                    text = stringResource(R.string.nothing_here),
+                                    Modifier.align(Alignment.Center)
                                 )
                             }
 
