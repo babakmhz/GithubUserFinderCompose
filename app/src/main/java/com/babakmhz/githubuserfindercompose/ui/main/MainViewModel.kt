@@ -50,13 +50,14 @@ class MainViewModel @Inject constructor(
                 }
                 // making sure user is complete with typing
                 .flatMapLatest {
-                    // getting result of last input with page 0 as it's a new input change
+                    // getting result of last input with page 1 as it's a new input change
                     _loadingState.postValue(true)
                     prepareForNewSearch()
-                    repositoryHelper.searchUsers(it, page=1)
-                }.catch { e ->
-                    _loadingState.postValue(false)
-                    _errorState.postValue(e)
+                    repositoryHelper.searchUsers(it, page = 1)
+                        .catch { e ->
+                            _loadingState.postValue(false)
+                            _errorState.postValue(e)
+                        }
                 }.flowOn(flowDispatcher)
 
                 .collect {
@@ -70,8 +71,9 @@ class MainViewModel @Inject constructor(
         usersListScrollPosition = position
     }
 
-    private fun prepareForNewSearch(){
+    private fun prepareForNewSearch() {
         _searchUsersLiveData.postValue(listOf())
+        _errorState.postValue(null)
         page.value = 1
         onChangeSearchListScrollPosition(0)
     }

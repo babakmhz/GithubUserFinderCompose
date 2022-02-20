@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.getValue
@@ -12,20 +11,24 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.babakmhz.githubuserfindercompose.R
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
 import com.babakmhz.githubuserfindercompose.ui.components.UserList
+import com.babakmhz.githubuserfindercompose.ui.components.util.SnackbarController
 import com.babakmhz.githubuserfindercompose.ui.main.MainViewModel
 import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeTheme
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 
 @FlowPreview
@@ -36,6 +39,8 @@ class SearchFragment : Fragment() {
     private val viewModel: MainViewModel by lazy {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
+
+    private val snackbarController = SnackbarController(lifecycleScope)
 
 
     @ExperimentalCoroutinesApi
@@ -50,7 +55,7 @@ class SearchFragment : Fragment() {
                 val scaffoldState = rememberScaffoldState()
                 val loading by viewModel.loadingLiveData.observeAsState()
                 val usersList by viewModel.searchUsersLiveData.observeAsState()
-                val error by viewModel.loadingLiveData.observeAsState()
+                val error by viewModel.errorLiveData.observeAsState()
                 val page = viewModel.page.value
                 val searchStateFlow = MutableStateFlow("")
                 viewModel.registerSearchFlow(searchStateFlow)
@@ -94,19 +99,54 @@ class SearchFragment : Fragment() {
                                 CircularProgressIndicator(
                                     modifier = Modifier
                                         .padding(24.dp)
-                                        .align(Alignment.Center)
+                                        .align(if (usersList.isNullOrEmpty()) Alignment.Center else Alignment.BottomEnd)
 
                                 )
                             }
 
+                            error?.let {
+                                if (usersList.isNullOrEmpty()) {
+                                    Column(
+                                        verticalArrangement = Arrangement.Center,
+                                        horizontalAlignment = Alignment.CenterHorizontally
+                                    ) {
+                                        Text(
+                                            text = stringResource(id = R.string.error_fetching_data_message),
+                                            fontSize = 22.sp,
+                                            textAlign = TextAlign.Center
+                                        )
+                                        Spacer(modifier = Modifier.padding(10.dp))
+                                        Button(onClick = {
+
+                                        }) {
+                                            Text(
+                                                text = "Retry",
+                                                fontSize = 18.sp
+                                            )
+                                        }
+                                    }
+                                } else {
+                                    // show snackBar
+                                    val errorMessage =
+                                        stringResource(id = R.string.error_fetching_data_message)
+                                    snackbarController.getScope().launch {
+                                        snackbarController.showSnackbar(
+                                            scaffoldState = scaffoldState,
+                                            message = errorMessage,
+                                            actionLabel = ""
+                                        )
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
             }
         }
+
+
     }
-
-
-}
 
 
 }
