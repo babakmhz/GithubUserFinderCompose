@@ -3,4 +3,6 @@
     <string name="id_d">id:%d</string>
     <string name="nothing_mathces_the_query">Nothing matches the query :(</string>
     <string name="error_fetching_data_message">Error fetching data 🙄 \nPlease check your Internet connection!</string>
+    <string name="retry">Retry</string>
+    <string name="retrying_in_d_seconds">Retrying in %d seconds...</string>
 </resources>

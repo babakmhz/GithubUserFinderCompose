@@ -4,22 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.babakmhz.githubuserfindercompose.R
+import com.babakmhz.githubuserfindercompose.ui.components.ConnectionError
+import com.babakmhz.githubuserfindercompose.ui.components.LoadingWithRetryIndicator
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
 import com.babakmhz.githubuserfindercompose.ui.components.UserList
 import com.babakmhz.githubuserfindercompose.ui.components.util.SnackbarController
@@ -28,7 +31,6 @@ import com.babakmhz.githubuserfindercompose.ui.theme.GithubUserFinderComposeThem
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
 
 
 @FlowPreview
@@ -96,36 +98,16 @@ class SearchFragment : Fragment() {
                                 },
                             )
                             if (loading == true) {
-                                CircularProgressIndicator(
-                                    modifier = Modifier
+                                LoadingWithRetryIndicator(
+                                    modifier =
+                                    Modifier
                                         .padding(24.dp)
                                         .align(if (usersList.isNullOrEmpty()) Alignment.Center else Alignment.BottomEnd)
-
                                 )
                             }
 
                             error?.let {
-                                if (usersList.isNullOrEmpty()) {
-                                    Column(
-                                        verticalArrangement = Arrangement.Center,
-                                        horizontalAlignment = Alignment.CenterHorizontally
-                                    ) {
-                                        Text(
-                                            text = stringResource(id = R.string.error_fetching_data_message),
-                                            fontSize = 22.sp,
-                                            textAlign = TextAlign.Center
-                                        )
-                                        Spacer(modifier = Modifier.padding(10.dp))
-                                        Button(onClick = {
-
-                                        }) {
-                                            Text(
-                                                text = "Retry",
-                                                fontSize = 18.sp
-                                            )
-                                        }
-                                    }
-                                }
+                                ConnectionError()
                             }
 
                         }
@@ -139,6 +121,7 @@ class SearchFragment : Fragment() {
 
 
 }
+
 
 
 
