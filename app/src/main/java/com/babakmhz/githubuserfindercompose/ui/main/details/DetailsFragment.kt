@@ -70,9 +70,9 @@ class DetailsFragment : BottomSheetDialogFragment() {
 @Composable
 fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
     Row(
-        modifier = Modifier.padding(8.dp),
+        modifier = Modifier.padding(8.dp).fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center,
+        horizontalArrangement = Arrangement.Start,
     ) {
         CircularImage(imageUrl =user.avatar_url)
         Spacer(modifier = Modifier.padding(8.dp))
