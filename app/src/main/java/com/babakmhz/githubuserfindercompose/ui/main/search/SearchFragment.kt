@@ -42,7 +42,6 @@ class SearchFragment : Fragment() {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
-    private val snackbarController = SnackbarController(lifecycleScope)
 
 
     @ExperimentalCoroutinesApi

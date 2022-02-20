@@ -5,4 +5,6 @@
     <string name="error_fetching_data_message">Error fetching data 🙄 \nPlease check your Internet connection!</string>
     <string name="retry">Retry</string>
     <string name="retrying_in_d_seconds">Retrying in %d seconds...</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
