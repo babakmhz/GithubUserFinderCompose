@@ -12,6 +12,7 @@ import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -39,6 +40,8 @@ class MainViewModel @Inject constructor(
 
     private var usersListScrollPosition = 0
 
+    private var retryDelay = 3000L
+    private val retryDelayFactor = 2
 
     @FlowPreview
     fun registerSearchFlow(queryFlow: StateFlow<String>) =
@@ -84,10 +87,16 @@ class MainViewModel @Inject constructor(
                 _loadingState.postValue(true)
                 page.value++
                 repositoryHelper.searchUsers(searchQuery.value, page.value)
-                    .catch { e ->
+                    .retry(retries = 3) {
+                        delay(retryDelay)
+                        retryDelay = (retryDelay * retryDelayFactor)
+                        return@retry true
+                    }.catch { e ->
                         _errorState.postValue(e)
                         _loadingState.postValue(false)
-                    }.collect {
+                        page.value--
+                    }
+                    .collect {
                         val previousResult = searchUsersLiveData.value
                         val result = ArrayList<User>()
                         result.addAll(previousResult!!.toList())
