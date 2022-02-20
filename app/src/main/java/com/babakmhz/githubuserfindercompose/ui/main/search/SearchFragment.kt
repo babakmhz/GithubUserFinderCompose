@@ -110,7 +110,7 @@ class SearchFragment : Fragment() {
                                 )
                             }
 
-                            if (usersList!!.isEmpty() && loading == false) {
+                            if (usersList!!.isEmpty() && loading == false && error == null) {
                                 Text(
                                     text = stringResource(R.string.nothing_here),
                                     Modifier.align(Alignment.Center)

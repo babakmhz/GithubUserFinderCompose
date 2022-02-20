@@ -82,6 +82,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun getQueryNextPage() {
+        // handling pagination in manual way
         if ((usersListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
             viewModelScope.launch {
                 _loadingState.postValue(true)
@@ -92,11 +93,12 @@ class MainViewModel @Inject constructor(
                         retryDelay = (retryDelay * retryDelayFactor)
                         return@retry true
                     }.catch { e ->
+                        // if error happened in getting the next page
                         _errorState.postValue(e)
                         _loadingState.postValue(false)
                         page.value--
-                    }
-                    .collect {
+                    }.collect {
+                        // appending the next page result to the previous result
                         val previousResult = searchUsersLiveData.value
                         val result = ArrayList<User>()
                         result.addAll(previousResult!!.toList())
@@ -119,10 +121,12 @@ class MainViewModel @Inject constructor(
 
 
     fun retrySearch(query: String) = viewModelScope.launch {
+        // resetting the states
         prepareForNewSearch()
         _loadingState.postValue(true)
         repositoryHelper.searchUsers(query, page = 1)
             .catch { e ->
+                // if error happened
                 _loadingState.postValue(false)
                 _errorState.postValue(e)
             }
