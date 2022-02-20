@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.babakmhz.githubuserfindercompose.data.RepositoryHelper
 import com.babakmhz.githubuserfindercompose.data.model.User
-import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE
+import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE_CONFIG_FOR_API
 import com.babakmhz.githubuserfindercompose.utils.launchWithException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -83,20 +83,25 @@ class MainViewModel @Inject constructor(
 
     fun getQueryNextPage() {
         // handling pagination in manual way
-        if ((usersListScrollPosition + 1) >= (page.value * PAGE_SIZE)) {
+        if ((usersListScrollPosition + 1) >= (page.value * PAGE_SIZE_CONFIG_FOR_API)) {
+
             viewModelScope.launch {
                 _loadingState.postValue(true)
                 page.value++
                 repositoryHelper.searchUsers(searchQuery.value, page.value)
                     .retry(retries = 3) {
+
                         delay(retryDelay)
                         retryDelay = (retryDelay * retryDelayFactor)
                         return@retry true
+
                     }.catch { e ->
+
                         // if error happened in getting the next page
                         _errorState.postValue(e)
                         _loadingState.postValue(false)
                         page.value--
+
                     }.collect {
                         // appending the next page result to the previous result
                         val previousResult = searchUsersLiveData.value

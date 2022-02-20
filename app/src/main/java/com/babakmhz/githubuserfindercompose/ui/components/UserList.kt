@@ -4,19 +4,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.babakmhz.githubuserfindercompose.data.model.User
-import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE
+import com.babakmhz.githubuserfindercompose.data.network.Constants.PAGE_SIZE_CONFIG_FOR_API
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.launch
-import timber.log.Timber
 
 
 @ExperimentalMaterialApi
@@ -40,7 +35,7 @@ fun UserList(
                 items = users
             ) { index, user ->
                 onChangeScrollPosition(index)
-                if ((index + 1) >= (page * PAGE_SIZE) && !loading) {
+                if ((index + 1) >= (page * PAGE_SIZE_CONFIG_FOR_API) && !loading) {
                     onTriggerNextPage()
                 }
 
