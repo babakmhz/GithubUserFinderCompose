@@ -113,8 +113,8 @@ class MainViewModel @Inject constructor(
         viewModelScope.launchWithException(_errorState, _loadingState) {
             _loadingState.postValue(true)
             val response = repositoryHelper.getUserDetails(username)
-            _loadingState.postValue(false)
             _userDetailsLiveData.postValue(response)
+            _loadingState.postValue(false)
         }
 
 

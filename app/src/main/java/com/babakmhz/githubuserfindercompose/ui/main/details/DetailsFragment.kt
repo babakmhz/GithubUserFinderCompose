@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -21,9 +22,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.navArgs
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.ui.components.CircularImage
-import com.babakmhz.githubuserfindercompose.ui.components.LoadingIndicator
 import com.babakmhz.githubuserfindercompose.ui.components.fakeUser
 import com.babakmhz.githubuserfindercompose.ui.main.MainViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -34,6 +35,12 @@ class DetailsFragment : BottomSheetDialogFragment() {
         ViewModelProvider(requireActivity())[MainViewModel::class.java]
     }
 
+    private val args: DetailsFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.getUserDetails(args.username)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,16 +48,15 @@ class DetailsFragment : BottomSheetDialogFragment() {
     ): View =
         ComposeView(requireContext()).apply {
             setContent {
-                val loading by viewModel.loadingLiveData.observeAsState()
                 val user by viewModel.userDetailsLiveData.observeAsState()
-                if (loading == true) {
-                    LoadingIndicator()
-                } else
-                    user?.let {
-                        DetailsScreen(user = it, onOpenProfileClicked = {
-                            requireActivity().startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(it)))
-                        })
-                    }
+                val error by viewModel.errorLiveData.observeAsState()
+                user?.let {
+                    DetailsScreen(user = it, onOpenProfileClicked = { url->
+                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+                    })
+                }
+
+
             }
         }
 
@@ -64,7 +70,7 @@ fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
-        CircularImage(imageUrl = fakeUser.avatar_url)
+        CircularImage(imageUrl =user.avatar_url)
         Spacer(modifier = Modifier.padding(8.dp))
         Column(modifier = Modifier.align(Alignment.Top)) {
             Text(text = "Username: ${user.username}")
