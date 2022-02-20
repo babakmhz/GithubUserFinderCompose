@@ -75,7 +75,7 @@ class SearchFragment : Fragment() {
                         }) {
 
                         Box(
-                            contentAlignment = Alignment.Center,
+                            contentAlignment = Alignment.TopCenter,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .fillMaxHeight()
@@ -124,17 +124,6 @@ class SearchFragment : Fragment() {
                                                 fontSize = 18.sp
                                             )
                                         }
-                                    }
-                                } else {
-                                    // show snackBar
-                                    val errorMessage =
-                                        stringResource(id = R.string.error_fetching_data_message)
-                                    snackbarController.getScope().launch {
-                                        snackbarController.showSnackbar(
-                                            scaffoldState = scaffoldState,
-                                            message = errorMessage,
-                                            actionLabel = ""
-                                        )
                                     }
                                 }
                             }
