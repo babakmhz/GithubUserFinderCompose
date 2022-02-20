@@ -14,4 +14,5 @@
     <string name="username_s">username: %s</string>
     <string name="name_s">Name: %s</string>
     <string name="email_s">Email: %s</string>
+    <string name="type_a_github_username">Type a Github Username...</string>
 </resources>
