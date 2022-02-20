@@ -109,34 +109,6 @@ class MainViewModelTest {
             assertEquals(viewModel.loadingLiveData.value, false)
         }
 
-    @Test
-    fun `test search users with valid query length value throws Exception should change loading state multiple times and errorState to Error`() =
-        coroutineDispatcher.runBlockingTest {
-
-            val userResponse = Throwable("something went wrong")
-
-            coEvery { repositoryHelper.searchUsers(ofType(), ofType()) } coAnswers {
-                delay(delayForNetworkResponse)
-                throw userResponse
-            }
-
-            viewModel.errorLiveData.observeForever {}
-            viewModel.loadingLiveData.observeForever { }
-
-            viewModel.registerSearchFlow(generateFakeFlow())
-
-            assertNotNull(viewModel.loadingLiveData.value)
-            advanceTimeBy(SEARCH_DELAY)
-            assertEquals(viewModel.loadingLiveData.value, true)
-
-            // waiting for network Response and in queryFlow that we previously had
-            advanceTimeBy(delayForNetworkResponse)
-            assertNotNull(viewModel.errorLiveData.value)
-
-            assertTrue(viewModel.errorLiveData.value is Throwable)
-            assertEquals(viewModel.loadingLiveData.value, false)
-
-        }
 
 
     @Test
