@@ -116,7 +116,24 @@ class MainViewModel @Inject constructor(
             _loadingState.postValue(false)
             _userDetailsLiveData.postValue(response)
         }
+
+
+    fun retrySearch(query: String) = viewModelScope.launch {
+        prepareForNewSearch()
+        _loadingState.postValue(true)
+        repositoryHelper.searchUsers(query, page = 1)
+            .catch { e ->
+                _loadingState.postValue(false)
+                _errorState.postValue(e)
+            }
+            .flowOn(flowDispatcher)
+            .collect {
+                // emitting data
+                _loadingState.postValue(false)
+                _searchUsersLiveData.postValue(it)
+            }
+    }
 }
 
-const val SEARCH_DELAY = 3000L
+const val SEARCH_DELAY = 1500L
 

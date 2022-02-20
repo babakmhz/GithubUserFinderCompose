@@ -16,19 +16,20 @@ import androidx.compose.ui.unit.sp
 import com.babakmhz.githubuserfindercompose.R
 
 @Composable
-fun ConnectionError(){
+fun ConnectionErrorWithRetry(modifier: Modifier = Modifier, onRetryClicked:()->Unit){
     Column(
         verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
     ) {
         Text(
             text = stringResource(id = R.string.error_fetching_data_message),
-            fontSize = 22.sp,
+            fontSize = 18.sp,
             textAlign = TextAlign.Center
         )
-        Spacer(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.padding(12.dp))
         Button(onClick = {
-
+            onRetryClicked()
         }) {
             Text(
                 text = stringResource(R.string.retry),

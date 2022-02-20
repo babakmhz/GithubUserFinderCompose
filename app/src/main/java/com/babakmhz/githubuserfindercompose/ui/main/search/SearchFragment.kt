@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.babakmhz.githubuserfindercompose.ui.components.ConnectionError
+import com.babakmhz.githubuserfindercompose.ui.components.ConnectionErrorWithRetry
 import com.babakmhz.githubuserfindercompose.ui.components.LoadingWithRetryIndicator
 import com.babakmhz.githubuserfindercompose.ui.components.SearchBar
 import com.babakmhz.githubuserfindercompose.ui.components.UserList
@@ -107,7 +107,12 @@ class SearchFragment : Fragment() {
                             }
 
                             error?.let {
-                                ConnectionError()
+                                if (usersList.isNullOrEmpty())
+                                    ConnectionErrorWithRetry(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        onRetryClicked = {
+                                            viewModel.retrySearch(searchQuery.value)
+                                        })
                             }
 
                         }
