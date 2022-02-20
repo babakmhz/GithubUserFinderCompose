@@ -11,7 +11,6 @@ class ApiHelperImpl @Inject constructor(private val apiService: ApiService) : Ap
 
     override suspend fun searchUsers(name: String, page: Int, perPage: Int): Flow<SearchResponse> {
         return flow {
-            Timber.i("emitting from apiHelperImpl...")
             emit(apiService.searchUsers(name, page, perPage))
         }
     }

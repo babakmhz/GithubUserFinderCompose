@@ -20,6 +20,4 @@ data class Item(
     val subscriptions_url: String,
     val type: String,
     val url: String
-){
-    private var totalResults = 0
-}
+)

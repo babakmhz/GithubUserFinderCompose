@@ -20,7 +20,6 @@ class RepositoryImpl @Inject constructor(
         return apiHelper.searchUsers(name = query, page = page).map {
             searchItemResponseToUserMapper.mapListItemsToListUsers(it)
         }
-//        return flowOf()
     }
 
     override suspend fun getUserDetails(username: String): User {
