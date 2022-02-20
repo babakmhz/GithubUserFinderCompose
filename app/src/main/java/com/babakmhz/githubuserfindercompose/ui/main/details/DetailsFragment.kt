@@ -44,6 +44,10 @@ class DetailsFragment : BottomSheetDialogFragment() {
         viewModel.getUserDetails(args.username)
     }
 
+    override fun getTheme(): Int {
+        return R.style.BaseBottomSheetDialog
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
