@@ -68,6 +68,7 @@ class SearchFragment : Fragment() {
                                 query = searchQuery,
                                 onQueryChanged = {
                                     searchStateFlow.value = it
+                                    viewModel.checkForEmptyQuery(it)
                                 },
                             )
                         },

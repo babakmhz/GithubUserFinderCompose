@@ -49,6 +49,7 @@ class MainViewModel @Inject constructor(
             queryFlow.debounce(SEARCH_DELAY)
                 .filter { username ->
                     //for avoiding unwanted network calls and handling rate limits
+
                     return@filter username.isNotEmpty()
                 }
                 // making sure user is complete with typing
@@ -72,6 +73,13 @@ class MainViewModel @Inject constructor(
 
     fun onChangeSearchListScrollPosition(position: Int) {
         usersListScrollPosition = position
+    }
+
+    fun checkForEmptyQuery(query: String){
+        // making search list empty when the query text is empty
+        // as the instant search works
+        if (query.isEmpty())
+            _searchUsersLiveData.postValue(arrayListOf())
     }
 
     private fun prepareForNewSearch() {
