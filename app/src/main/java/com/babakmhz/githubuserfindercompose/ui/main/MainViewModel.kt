@@ -87,7 +87,10 @@ class MainViewModel @Inject constructor(
 
             viewModelScope.launch {
                 _loadingState.postValue(true)
+
+                // increasing the page to avoid multiple calls
                 page.value++
+
                 repositoryHelper.searchUsers(searchQuery.value, page.value)
                     .retry(retries = 3) {
 
@@ -100,6 +103,7 @@ class MainViewModel @Inject constructor(
                         // if error happened in getting the next page
                         _errorState.postValue(e)
                         _loadingState.postValue(false)
+                        // decrementing the page number to make function callable again for the next page
                         page.value--
 
                     }.collect {
