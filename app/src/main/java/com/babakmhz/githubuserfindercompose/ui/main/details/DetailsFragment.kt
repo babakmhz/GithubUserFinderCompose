@@ -74,11 +74,17 @@ fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
     ) {
         CircularImage(imageUrl =user.avatar_url)
         Spacer(modifier = Modifier.padding(8.dp))
-        Column(modifier = Modifier.align(Alignment.Top)) {
+        Column(modifier = Modifier.align(Alignment.CenterVertically)) {
             Text(text = "Username: ${user.username}")
-            Text(text = "Bio: ${user.userDetails?.bio}")
-            Text(text = "Public Repos: ${user.userDetails?.public_repos}")
-            Text(text = "Score: ${user.score}")
+            user.userDetails?.bio?.let {
+                Text(text = "Bio: ${user.userDetails?.bio}")
+            }
+            user.userDetails?.public_repos?.let {
+                Text(text = "Public Repos: ${user.userDetails?.public_repos}")
+            }
+            user.score?.let {
+                Text(text = "Score: ${user.score}")
+            }
             ClickableText(text =
             AnnotatedString("Open Full Profile", SpanStyle(Color.Blue)), onClick = {
                 onOpenProfileClicked.invoke(user.html_url)
