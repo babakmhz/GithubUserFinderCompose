@@ -17,12 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.babakmhz.githubuserfindercompose.R
 import com.babakmhz.githubuserfindercompose.data.model.User
 import com.babakmhz.githubuserfindercompose.ui.components.CircularImage
 import com.babakmhz.githubuserfindercompose.ui.components.fakeUser
@@ -75,18 +77,19 @@ fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
         CircularImage(imageUrl =user.avatar_url)
         Spacer(modifier = Modifier.padding(8.dp))
         Column(modifier = Modifier.align(Alignment.CenterVertically)) {
-            Text(text = "Username: ${user.username}")
+            Text(text = stringResource(id = R.string.username_s,user.username))
             user.userDetails?.bio?.let {
-                Text(text = "Bio: ${user.userDetails?.bio}")
+                Text(text = stringResource(id = R.string.bio_s, user.userDetails?.bio!!))
             }
             user.userDetails?.public_repos?.let {
-                Text(text = "Public Repos: ${user.userDetails?.public_repos}")
+                Text(text =  stringResource(id = R.string.public_repos_s,
+                    user.userDetails?.public_repos.toString()))
             }
             user.score?.let {
-                Text(text = "Score: ${user.score}")
+                Text(text = stringResource(id = R.string.score_s, user.score.toString()))
             }
             ClickableText(text =
-            AnnotatedString("Open Full Profile", SpanStyle(Color.Blue)), onClick = {
+            AnnotatedString(stringResource(R.string.open_full_profile), SpanStyle(Color.Blue)), onClick = {
                 onOpenProfileClicked.invoke(user.html_url)
             })
         }

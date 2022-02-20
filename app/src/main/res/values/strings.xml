@@ -7,4 +7,9 @@
     <string name="retrying_in_d_seconds">Retrying in %d seconds...</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="open_full_profile">Open Full Profile</string>
+    <string name="score_s">Score: %s</string>
+    <string name="public_repos_s">Public Repos: %s</string>
+    <string name="bio_s">Bio: %s</string>
+    <string name="username_s">Username: %s</string>
 </resources>
