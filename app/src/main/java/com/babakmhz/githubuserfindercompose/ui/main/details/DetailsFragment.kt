@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,6 +19,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
@@ -51,10 +51,19 @@ class DetailsFragment : BottomSheetDialogFragment() {
         ComposeView(requireContext()).apply {
             setContent {
                 val user by viewModel.userDetailsLiveData.observeAsState()
+                val error by viewModel.errorLiveData.observeAsState()
                 user?.let {
-                    DetailsScreen(user = it, onOpenProfileClicked = { url->
+                    DetailsScreen(user = it, onOpenProfileClicked = { url ->
                         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
                     })
+                }
+
+                error?.let {
+                    Text(
+                        stringResource(id = R.string.error_fetching_data_message),
+                        modifier = Modifier.padding(32.dp).fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
                 }
 
 
@@ -70,23 +79,29 @@ class DetailsFragment : BottomSheetDialogFragment() {
 @Composable
 fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
     Row(
-        modifier = Modifier.padding(8.dp).fillMaxWidth(),
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Start,
     ) {
-        CircularImage(imageUrl =user.avatar_url)
+        CircularImage(imageUrl = user.avatar_url)
         Spacer(modifier = Modifier.padding(8.dp))
         Column(modifier = Modifier.align(Alignment.CenterVertically)) {
 
-            Text(text = stringResource(id = R.string.username_s,user.username))
+            Text(text = stringResource(id = R.string.username_s, user.username))
 
             user.userDetails?.bio?.let {
                 Text(text = stringResource(id = R.string.bio_s, it))
             }
 
             user.userDetails?.public_repos?.let {
-                Text(text =  stringResource(id = R.string.public_repos_s,
-                    it.toString()))
+                Text(
+                    text = stringResource(
+                        id = R.string.public_repos_s,
+                        it.toString()
+                    )
+                )
             }
 
             user.score?.let {
@@ -98,9 +113,10 @@ fun DetailsScreen(user: User, onOpenProfileClicked: (String) -> Unit) {
             }
 
             ClickableText(text =
-            AnnotatedString(stringResource(R.string.open_full_profile), SpanStyle(Color.Blue)), onClick = {
-                onOpenProfileClicked.invoke(user.html_url)
-            })
+            AnnotatedString(stringResource(R.string.open_full_profile), SpanStyle(Color.Blue)),
+                onClick = {
+                    onOpenProfileClicked.invoke(user.html_url)
+                })
         }
     }
 }

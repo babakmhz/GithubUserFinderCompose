@@ -148,7 +148,10 @@ class MainViewModel @Inject constructor(
     }
 
 
-    fun onDetailsFragmentDestroyed() = _userDetailsLiveData.postValue(null)
+    fun onDetailsFragmentDestroyed()  {
+        _userDetailsLiveData.postValue(null)
+        _errorState.postValue(null)
+    }
 }
 
 const val SEARCH_DELAY = 1500L
